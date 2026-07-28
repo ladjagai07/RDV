@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Une question pour toi 💌</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="carte">
+    <h1>Hey {{ donnees.prenom }} 💕</h1>
+
+    <p>
+        Veux-tu sortir avec moi
+        {% if donnees.date %}le <strong>{{ donnees.date }}</strong>{% endif %}
+        {% if donnees.heure %}à <strong>{{ donnees.heure }}</strong>{% endif %}
+        {% if donnees.lieu %}à <strong>{{ donnees.lieu }}</strong>{% endif %} ?
+    </p>
+
+    {% if donnees.activites %}
+    <p>Au programme : {{ donnees.activites }}</p>
+    {% endif %}
+
+    {% if donnees.message %}
+    <p><em>"{{ donnees.message }}"</em></p>
+    {% endif %}
+
+    <div class="zone-boutons" id="zoneBoutons">
+        <button class="btn-oui" id="btnOui" onclick="direOui()">Oui 💖</button>
+        <button class="btn-non" id="btnNon">Non</button>
+    </div>
+
+    <div class="message-taquin" id="messageTaquin"></div>
+</div>
+
+<script>
+const zone = document.getElementById('zoneBoutons');
+const btnNon = document.getElementById('btnNon');
+const btnOui = document.getElementById('btnOui');
+const messageTaquin = document.getElementById('messageTaquin');
+
+const messagesTaquins = [
+    "Essaie encore 😏",
+    "Non non non, pas celui-là !",
+    "Tu es sûr(e) ? 👀",
+    "Le bouton a peur de toi 😅",
+    "Allez, clique sur Oui plutôt !",
+    "Il fuit, il fuit... 🏃",
+    "Tu ne l'attraperas jamais !",
+    "Le Oui t'attend juste à côté 💖"
+];
+
+let tentative = 0;
+let echelleOui = 1;
+
+function positionAleatoire() {
+    const largeurZone = zone.clientWidth;
+    const hauteurZone = zone.clientHeight;
+    const largeurBtn = btnNon.offsetWidth;
+    const hauteurBtn = btnNon.offsetHeight;
+
+    const maxX = Math.max(largeurZone - largeurBtn, 0);
+    const maxY = Math.max(hauteurZone - hauteurBtn, 0);
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    btnNon.style.position = 'absolute';
+    btnNon.style.left = x + 'px';
+    btnNon.style.top = y + 'px';
+}
+
+function fuir() {
+    tentative++;
+    positionAleatoire();
+
+    // Le bouton Oui grandit un peu à chaque tentative, jusqu'à une limite
+    if (echelleOui < 1.6) {
+        echelleOui += 0.08;
+        btnOui.style.fontSize = (1.2 * echelleOui) + 'em';
+        btnOui.style.padding = (16 * echelleOui) + 'px ' + (36 * echelleOui) + 'px';
+    }
+
+    const message = messagesTaquins[Math.min(tentative - 1, messagesTaquins.length - 1)];
+    messageTaquin.textContent = message;
+}
+
+// Sur ordinateur : le survol de la souris fait fuir le bouton
+btnNon.addEventListener('mouseover', fuir);
+
+// Sur mobile : le premier toucher fait fuir le bouton avant même le clic
+btnNon.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    fuir();
+}, { passive: false });
+
+// Sécurité supplémentaire : si jamais il est cliqué, on le fait fuir aussi
+btnNon.addEventListener('click', function (e) {
+    e.preventDefault();
+    fuir();
+});
+
+function direOui() {
+    document.querySelector('.carte').innerHTML = `
+        <h1>Youpi ! 🎉💖</h1>
+        <p>C'est noté, {{ donnees.prenom }} ! On se retrouve
+        {% if donnees.date %} le <strong>{{ donnees.date }}</strong>{% endif %}
+        {% if donnees.heure %} à <strong>{{ donnees.heure }}</strong>{% endif %}
+        {% if donnees.lieu %} à <strong>{{ donnees.lieu }}</strong>{% endif %}.</p>
+        <p>J'ai hâte d'y être ! 💕</p>
+    `;
+    lancerCoeurs();
+}
+
+function lancerCoeurs() {
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const coeur = document.createElement('div');
+            coeur.className = 'coeur-flottant';
+            coeur.textContent = '❤️';
+            coeur.style.left = Math.random() * 100 + 'vw';
+            coeur.style.animationDuration = (2 + Math.random() * 2) + 's';
+            document.body.appendChild(coeur);
+            setTimeout(() => coeur.remove(), 4000);
+        }, i * 100);
+    }
+}
+</script>
+</body>
+</html>
