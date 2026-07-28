@@ -1,0 +1,160 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #ffffff;
+    color: #b3001b;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.carte {
+    background: #ffffff;
+    border: 2px solid #d90429;
+    border-radius: 20px;
+    padding: 40px 30px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(217, 4, 41, 0.15);
+}
+
+h1 {
+    color: #d90429;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+p {
+    line-height: 1.6;
+    font-size: 1.05em;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #b3001b;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #f1b0b7;
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: inherit;
+    outline: none;
+}
+
+input:focus, textarea:focus {
+    border-color: #d90429;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    background: #d90429;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn:hover {
+    background: #b3001b;
+    transform: scale(1.05);
+}
+
+.lien-resultat {
+    margin-top: 24px;
+    padding: 14px;
+    background: #fff0f1;
+    border: 1px dashed #d90429;
+    border-radius: 12px;
+    word-break: break-all;
+    font-size: 0.9em;
+}
+
+.zone-boutons {
+    position: relative;
+    height: 140px;
+    margin-top: 30px;
+}
+
+.btn-oui {
+    padding: 16px 36px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 40px;
+    background: #d90429;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(217, 4, 41, 0.3);
+    transition: transform 0.2s ease, font-size 0.2s ease, padding 0.2s ease;
+}
+
+.btn-oui:hover {
+    transform: scale(1.08);
+}
+
+.btn-non {
+    position: absolute;
+    padding: 16px 36px;
+    font-size: 1.2em;
+    border: 2px solid #d90429;
+    border-radius: 40px;
+    background: #ffffff;
+    color: #d90429;
+    cursor: pointer;
+    transition: top 0.25s ease, left 0.25s ease, transform 0.2s ease, font-size 0.2s ease, opacity 0.2s ease;
+}
+
+.coeur-flottant {
+    position: fixed;
+    top: -40px;
+    font-size: 1.5em;
+    color: #d90429;
+    opacity: 0.8;
+    animation: tomber linear forwards;
+    pointer-events: none;
+}
+
+@keyframes tomber {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.message-taquin {
+    margin-top: 14px;
+    font-style: italic;
+    color: #b3001b;
+    min-height: 24px;
+}
+
+footer {
+    margin-top: 24px;
+    font-size: 0.8em;
+    color: #e08a95;
+}
