@@ -8,6 +8,11 @@
 </head>
 <body>
 <div class="carte">
+
+    {% if donnees.photo_url %}
+    <img src="{{ donnees.photo_url }}" alt="Photo" class="photo-invitation">
+    {% endif %}
+
     <h1>Hey {{ donnees.prenom }} 💕</h1>
 
     <p>
@@ -25,6 +30,15 @@
     <p><em>"{{ donnees.message }}"</em></p>
     {% endif %}
 
+    {% if donnees.musique_url %}
+    <button class="btn-musique" id="btnMusique" onclick="jouerMusique()">🎵 Activer la musique</button>
+    <audio id="audioFond" loop>
+        <source src="{{ donnees.musique_url }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+
+    <div id="compteARebours" class="compte-rebours"></div>
+
     <div class="zone-boutons" id="zoneBoutons">
         <button class="btn-oui" id="btnOui" onclick="direOui()">Oui 💖</button>
         <button class="btn-non" id="btnNon">Non</button>
@@ -34,6 +48,7 @@
 </div>
 
 <script>
+// ---- Bouton "Non" qui fuit ----
 const zone = document.getElementById('zoneBoutons');
 const btnNon = document.getElementById('btnNon');
 const btnOui = document.getElementById('btnOui');
@@ -58,13 +73,10 @@ function positionAleatoire() {
     const hauteurZone = zone.clientHeight;
     const largeurBtn = btnNon.offsetWidth;
     const hauteurBtn = btnNon.offsetHeight;
-
     const maxX = Math.max(largeurZone - largeurBtn, 0);
     const maxY = Math.max(hauteurZone - hauteurBtn, 0);
-
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
-
     btnNon.style.position = 'absolute';
     btnNon.style.left = x + 'px';
     btnNon.style.top = y + 'px';
@@ -73,32 +85,18 @@ function positionAleatoire() {
 function fuir() {
     tentative++;
     positionAleatoire();
-
-    // Le bouton Oui grandit un peu à chaque tentative, jusqu'à une limite
     if (echelleOui < 1.6) {
         echelleOui += 0.08;
         btnOui.style.fontSize = (1.2 * echelleOui) + 'em';
         btnOui.style.padding = (16 * echelleOui) + 'px ' + (36 * echelleOui) + 'px';
     }
-
     const message = messagesTaquins[Math.min(tentative - 1, messagesTaquins.length - 1)];
     messageTaquin.textContent = message;
 }
 
-// Sur ordinateur : le survol de la souris fait fuir le bouton
 btnNon.addEventListener('mouseover', fuir);
-
-// Sur mobile : le premier toucher fait fuir le bouton avant même le clic
-btnNon.addEventListener('touchstart', function (e) {
-    e.preventDefault();
-    fuir();
-}, { passive: false });
-
-// Sécurité supplémentaire : si jamais il est cliqué, on le fait fuir aussi
-btnNon.addEventListener('click', function (e) {
-    e.preventDefault();
-    fuir();
-});
+btnNon.addEventListener('touchstart', function (e) { e.preventDefault(); fuir(); }, { passive: false });
+btnNon.addEventListener('click', function (e) { e.preventDefault(); fuir(); });
 
 function direOui() {
     document.querySelector('.carte').innerHTML = `
@@ -125,6 +123,46 @@ function lancerCoeurs() {
         }, i * 100);
     }
 }
+
+// ---- Musique de fond ----
+function jouerMusique() {
+    const audio = document.getElementById('audioFond');
+    const btn = document.getElementById('btnMusique');
+    if (audio.paused) {
+        audio.play();
+        btn.textContent = '🔇 Couper la musique';
+    } else {
+        audio.pause();
+        btn.textContent = '🎵 Activer la musique';
+    }
+}
+
+// ---- Compte à rebours ----
+{% if donnees.date and donnees.heure %}
+const dateCible = new Date("{{ donnees.date }}T{{ donnees.heure }}:00");
+const elementCompte = document.getElementById('compteARebours');
+
+function mettreAJourCompte() {
+    const maintenant = new Date();
+    const diff = dateCible - maintenant;
+
+    if (diff <= 0) {
+        elementCompte.textContent = "C'est aujourd'hui ! 🎉";
+        return;
+    }
+
+    const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const heures = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const secondes = Math.floor((diff / 1000) % 60);
+
+    elementCompte.textContent =
+        `⏳ ${jours}j ${heures}h ${minutes}m ${secondes}s avant le rendez-vous`;
+}
+
+mettreAJourCompte();
+setInterval(mettreAJourCompte, 1000);
+{% endif %}
 </script>
 </body>
 </html>
