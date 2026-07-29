@@ -9,11 +9,11 @@
 <body>
 <div class="carte">
     <h1>Crée ton invitation romantique 💌</h1>
-    <p>Remplis les informations ci-dessous. Le paiement de 3,00 € débloque ton lien personnalisé.</p>
+    <p>Remplis les informations ci-dessous, un lien personnalisé sera généré.</p>
 
-    <form method="POST" action="{{ url_for('creer_paiement') }}">
+    <form method="POST">
         <label for="prenom">Prénom de la personne</label>
-        <input type="text" id="prenom" name="prenom" placeholder="Ex : fernande" required>
+        <input type="text" id="prenom" name="prenom" placeholder="Ex : Sarah" required>
 
         <label for="date">Date du rendez-vous</label>
         <input type="date" id="date" name="date" required>
@@ -36,8 +36,15 @@
         <label for="musique_url">Lien vers une musique MP3 (optionnel)</label>
         <input type="url" id="musique_url" name="musique_url" placeholder="https://...">
 
-        <button type="submit" class="btn">Payer et générer le lien (3,00 €)</button>
+        <button type="submit" class="btn">Générer le lien</button>
     </form>
+
+    {% if lien_genere %}
+    <div class="lien-resultat">
+        <strong>Ton lien est prêt :</strong><br>
+        <a href="{{ lien_genere }}" style="color:#d90429;">{{ lien_genere }}</a>
+    </div>
+    {% endif %}
 </div>
 </body>
 </html>
