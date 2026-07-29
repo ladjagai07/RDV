@@ -1,20 +1,44 @@
-Crée ton invitation romantique 💌
-Remplis les informations ci-dessous, un lien personnalisé sera généré.
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crée ton invitation 💌</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="carte">
+    <h1>Crée ton invitation romantique 💌</h1>
+    <p>Remplis les informations ci-dessous, un lien personnalisé sera généré.</p>
 
-Prénom de la personne 
-Ex : Sarah
- Date du rendez-vous 
- 
- Heure 
- 
- Lieu 
-Ex : Restaurant Le Petit Jardin
- Activités prévues 
-Ex : Dîner puis balade au bord de l'eau
- Petit mot personnalisé (optionnel) 
-Ex : J'ai hâte de passer ce moment avec toi...
- Générer le lien
-{% if lien_genere %}
-Ton lien est prêt :
-{{ lien_genere }}
-{% endif %}
+    <form method="POST">
+        <label for="prenom">Prénom de la personne</label>
+        <input type="text" id="prenom" name="prenom" placeholder="Ex : Sarah" required>
+
+        <label for="date">Date du rendez-vous</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="heure">Heure</label>
+        <input type="time" id="heure" name="heure" required>
+
+        <label for="lieu">Lieu</label>
+        <input type="text" id="lieu" name="lieu" placeholder="Ex : Restaurant Le Petit Jardin" required>
+
+        <label for="activites">Activités prévues</label>
+        <textarea id="activites" name="activites" placeholder="Ex : Dîner puis balade au bord de l'eau"></textarea>
+
+        <label for="message">Petit mot personnalisé (optionnel)</label>
+        <textarea id="message" name="message" placeholder="Ex : J'ai hâte de passer ce moment avec toi..."></textarea>
+
+        <button type="submit" class="btn">Générer le lien</button>
+    </form>
+
+    {% if lien_genere %}
+    <div class="lien-resultat">
+        <strong>Ton lien est prêt :</strong><br>
+        <a href="{{ lien_genere }}" style="color:#d90429;">{{ lien_genere }}</a>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
